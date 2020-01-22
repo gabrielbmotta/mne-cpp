@@ -1,14 +1,14 @@
-name: InDocTest
+name: NotInDocTest
 
 on:
   push:
     branchs:
     - actions
     paths:
-    - 'doc/**'
+    - '!doc/**'
 
 jobs:
-  DocsChange:
+  NonDocsChange:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,4 +16,4 @@ jobs:
       uses: actions/checkout@v1
     - name: Echo Stuff
       run: |
-        echo "In docs"
+        echo "Not in docs"
