@@ -1,0 +1,32 @@
+name: Test
+
+on:
+  push:
+    paths:
+    - 'doc/**'
+
+jobs:
+    TestTest1:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v1
+    - name: Echo Stuff
+      run: |
+        echo "In docs"
+
+on:
+  push:
+    paths:
+    - '!doc/**'
+
+    TestTest2:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v1
+    - name: Echo Stuff
+      run: |
+        echo "Not in docs"
