@@ -4,8 +4,8 @@ on:
   push:
     branchs:
     - actions
-    paths:
-    - '!doc/**'
+    paths-ignore:
+    - 'doc/**'
 
 jobs:
   NonDocsChange:
