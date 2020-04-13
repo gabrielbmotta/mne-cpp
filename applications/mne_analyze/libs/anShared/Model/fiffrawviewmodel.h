@@ -101,15 +101,15 @@ public:
     /**
      * Constructs a FiffRawViewModel object.
      */
-    FiffRawViewModel(QObject *pParent = Q_Q_NULLPTR);
+    FiffRawViewModel(QObject *pParent = Q_NULLPTR);
 
     //=========================================================================================================
     /**
      * Constructs a FiffRawViewModel object.
      */
     FiffRawViewModel(const QString &sFilePath,
-                     qint32 iVisibleWindowSize = 1,
-                     qint32 iPreloadBufferSize = 1,
+                     qint32 iVisibleWindowSize = 10,
+                     qint32 iPreloadBufferSize = 10,
                      QObject *pParent = Q_NULLPTR);
 
     //=========================================================================================================
@@ -119,8 +119,8 @@ public:
      */
     FiffRawViewModel(const QString &sFilePath,
                      const QByteArray& byteLoadedData,
-                     qint32 iVisibleWindowSize = 1,
-                     qint32 iPreloadBufferSize = 1,
+                     qint32 iVisibleWindowSize = 10,
+                     qint32 iPreloadBufferSize = 10,
                      QObject *pParent = Q_NULLPTR);
 
     //=========================================================================================================

@@ -154,7 +154,7 @@ void FiffRawViewDelegate::paint(QPainter *painter,
                 painter->drawPath(path);
                 painter->restore();
 
-                qDebug() << "DISP:" << pFiffRawModel->shouldDisplayAnn();
+                //qDebug() << "DISP:" << pFiffRawModel->shouldDisplayAnn();
                 if(pFiffRawModel->shouldDisplayAnn()) {
                     path = QPainterPath(QPointF(option.rect.x()+pos, option.rect.y()));
 
