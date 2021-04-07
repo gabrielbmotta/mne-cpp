@@ -120,6 +120,7 @@ SOURCES += \
     viewers/spharasettingsview.cpp \
     viewers/fiffrawviewsettings.cpp \
     viewers/averageselectionview.cpp \
+    viewers/timefrequencylayoutview.cpp \
     viewers/timefrequencyview.cpp \
     viewers/triggerdetectionview.cpp \
     viewers/quickcontrolview.cpp \
@@ -183,6 +184,7 @@ HEADERS += \
     viewers/spharasettingsview.h \
     viewers/fiffrawviewsettings.h \
     viewers/averageselectionview.h \
+    viewers/timefrequencylayoutview.h \
     viewers/timefrequencyview.h \
     viewers/triggerdetectionview.h \
     viewers/quickcontrolview.h \
