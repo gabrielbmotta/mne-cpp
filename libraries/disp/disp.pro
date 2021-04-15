@@ -108,6 +108,7 @@ SOURCES += \
     viewers/filterdesignview.cpp \
     viewers/averagelayoutview.cpp \
     viewers/fwdsettingsview.cpp \
+    viewers/helpers/colorgradient.cpp \
     viewers/helpers/scalecontrol.cpp \
     viewers/helpers/timefrequencymodel.cpp \
     viewers/helpers/timefrequencyscene.cpp \
@@ -172,6 +173,7 @@ HEADERS += \
     viewers/filterdesignview.h \
     viewers/averagelayoutview.h \
     viewers/fwdsettingsview.h \
+    viewers/helpers/colorgradient.h \
     viewers/helpers/scalecontrol.h \
     viewers/helpers/timefrequencymodel.h \
     viewers/helpers/timefrequencyscene.h \
