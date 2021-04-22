@@ -127,6 +127,7 @@ SOURCES += \
     viewers/fiffrawviewsettings.cpp \
     viewers/averageselectionview.cpp \
     viewers/timefrequencylayoutview.cpp \
+    viewers/timefrequencysettingsview.cpp \
     viewers/timefrequencyview.cpp \
     viewers/triggerdetectionview.cpp \
     viewers/quickcontrolview.cpp \
@@ -192,6 +193,7 @@ HEADERS += \
     viewers/fiffrawviewsettings.h \
     viewers/averageselectionview.h \
     viewers/timefrequencylayoutview.h \
+    viewers/timefrequencysettingsview.h \
     viewers/timefrequencyview.h \
     viewers/triggerdetectionview.h \
     viewers/quickcontrolview.h \
@@ -245,6 +247,7 @@ FORMS += \
     viewers/formfiles/progressview.ui \
     viewers/formfiles/spharasettingsview.ui \
     viewers/formfiles/fiffrawviewsettings.ui \
+    viewers/formfiles/timefrequencysettingsview.ui \
     viewers/formfiles/triggerdetectionview.ui \
     viewers/formfiles/quickcontrolview.ui \
     viewers/formfiles/tfsettingsview.ui \
