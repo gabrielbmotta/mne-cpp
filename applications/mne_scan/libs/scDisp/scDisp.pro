@@ -95,8 +95,10 @@ SOURCES += \
     realtimecovwidget.cpp \
     realtimespectrumwidget.cpp \
     realtime3dwidget.cpp \
+    realtimetimefrequencywidget.cpp
 
 HEADERS += \
+    realtimetimefrequencywidget.h \
     scdisp_global.h \
     measurementwidget.h \
     realtimemultisamplearraywidget.h \
