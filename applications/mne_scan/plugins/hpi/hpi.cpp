@@ -74,7 +74,7 @@ using namespace INVERSELIB;
 //=============================================================================================================
 
 Hpi::Hpi()
-: m_iNumberOfFitsPerSecond(3)
+: m_iNumberOfFitsPerSecond(6)
 , m_bDoFreqOrder(false)
 , m_bDoSingleHpi(false)
 , m_bDoContinousHpi(false)
