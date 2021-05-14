@@ -172,6 +172,12 @@ public:
      */
     void clearView();
 
+    //=========================================================================================================
+    /**
+     * Sets the HPI coil frequency values.
+     */
+    void setCoilFreqs(const QVector<int>& freqs);
+
 protected:
     //=========================================================================================================
     /**
@@ -226,6 +232,7 @@ protected:
     Ui::HpiSettingsViewWidget*                  m_pUi;                  /**< The HPI dialog. */
 
     QVector<int>                                m_vCoilFreqs;           /**< Vector contains the HPI coil frequencies. */
+    QVector<int>                                m_vDefaultCoilFreqs;    /**< Vector containing the default values for Hpi coil freqs. */
 
     QString                                     m_sSettingsPath;        /**< The settings path to store the GUI settings to. */
 
