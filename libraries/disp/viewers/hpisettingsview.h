@@ -226,6 +226,7 @@ protected:
     Ui::HpiSettingsViewWidget*                  m_pUi;                  /**< The HPI dialog. */
 
     QVector<int>                                m_vCoilFreqs;           /**< Vector contains the HPI coil frequencies. */
+    QVector<int>                                m_vSSADHDCoilFreqs;     /**< Default coil freqs for Sheraz's study */
 
     QString                                     m_sSettingsPath;        /**< The settings path to store the GUI settings to. */
 

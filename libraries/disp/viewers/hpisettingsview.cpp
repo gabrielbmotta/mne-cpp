@@ -103,6 +103,7 @@ HpiSettingsView::HpiSettingsView(const QString& sSettingsPath,
             this, &HpiSettingsView::allowedRotationChanged);
     //Init coil freqs
     m_vCoilFreqs << 155 << 165 << 190 << 200;
+    m_vSSADHDCoilFreqs << 293 << 307 << 314 << 321;
     qRegisterMetaTypeStreamOperators<QVector<int> >("QVector<int>");
 
     loadSettings();
@@ -435,9 +436,9 @@ QList<FiffDigPoint> HpiSettingsView::readPolhemusDig(const QString& fileName)
                                                              new QTableWidgetItem(QString::number(m_vCoilFreqs.at(numHPI))));
                 } else {
                     m_pUi->m_tableWidget_Frequencies->setItem(m_pUi->m_tableWidget_Frequencies->rowCount()-1,
-                                                             1,
-                                                             new QTableWidgetItem("none"));
-                    m_vCoilFreqs.append(-1);
+                                                              1,
+                                                              new QTableWidgetItem(QString::number(m_vSSADHDCoilFreqs.at(m_pUi->m_tableWidget_Frequencies->rowCount()-1 % m_vSSADHDCoilFreqs.size()))));
+                    m_vCoilFreqs.append(m_vSSADHDCoilFreqs.at(m_pUi->m_tableWidget_Frequencies->rowCount()-1 % m_vSSADHDCoilFreqs.size()));
                 }
 
                 // Add column 0 in error table widget
