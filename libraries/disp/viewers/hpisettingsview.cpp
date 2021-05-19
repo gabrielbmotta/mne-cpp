@@ -437,8 +437,8 @@ QList<FiffDigPoint> HpiSettingsView::readPolhemusDig(const QString& fileName)
                 } else {
                     m_pUi->m_tableWidget_Frequencies->setItem(m_pUi->m_tableWidget_Frequencies->rowCount()-1,
                                                               1,
-                                                              new QTableWidgetItem(QString::number(m_vSSADHDCoilFreqs.at(m_pUi->m_tableWidget_Frequencies->rowCount()-1 % m_vSSADHDCoilFreqs.size()))));
-                    m_vCoilFreqs.append(m_vSSADHDCoilFreqs.at(m_pUi->m_tableWidget_Frequencies->rowCount()-1 % m_vSSADHDCoilFreqs.size()));
+                                                              new QTableWidgetItem(QString::number(m_vSSADHDCoilFreqs.at((m_pUi->m_tableWidget_Frequencies->rowCount()-1) % m_vSSADHDCoilFreqs.size()))));
+                    m_vCoilFreqs.append(m_vSSADHDCoilFreqs.at((m_pUi->m_tableWidget_Frequencies->rowCount()-1) % m_vSSADHDCoilFreqs.size()));
                 }
 
                 // Add column 0 in error table widget
