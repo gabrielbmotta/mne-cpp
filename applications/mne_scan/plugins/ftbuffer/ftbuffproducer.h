@@ -146,11 +146,30 @@ signals:
      */
     void connecStatus(bool connection);
 
+    //=========================================================================================================
+    /**
+     * @brief newInfoAvailable
+     * @param info
+     */
+    void newInfoAvailable(const FIFFLIB::FiffInfo& info);
+
+    void connectToBuffer();
+
+    void parseBufferHeader();
+
+    void getBufferData();
+
 private:
+    QMutex                          m_mutex;
+
+    bool                            m_bConnectAndHeader;
+
+    QString                         m_sBufferAddress;           /**< The address used to connect to the buffer if starting without being connected */
+    int                             m_iBufferPort;              /**< The port used to connect to the buffer if starting without being connected */
+
     FtBuffer*                       m_pFtBuffer;                /**< Pointer to FtBuffer that created this object. Destination of collected data. */
 
     FtConnector*                    m_pFtConnector;             /**< FtConnectr object that interfaces with buffer and gets buffer data. */
-
 };
 
 } // namespace

@@ -90,18 +90,52 @@ void FtBuffProducer::runMainLoop()
     qInfo() << "[FtBuffProducer::runMainLoop] Connected to buffer and ready to receive data.";
 
     while(!this->thread()->isInterruptionRequested()) {
-        m_pFtConnector->getData();
 
-        //Sends up new data when FtConnector flags new data
-        if (m_pFtConnector->newData()) {
-            emit newDataAvailable(m_pFtConnector->getMatrix());
-            m_pFtConnector->resetEmitData();
-        }
 
         //QThread::usleep(50);
     }
 
     this->thread()->quit();
+}
+
+//=============================================================================================================
+
+void FtBuffProducer::runMainLoop()
+{
+    while(!this->thread()->isInterruptionRequested()) {
+        connectToBuffer();
+        parseBufferHeader();
+        while(!this->thread()->isInterruptionRequested() && m_bConnectAndHeader){
+            getBufferData();
+        }
+    }
+}
+
+//=============================================================================================================
+
+void FtBuffProducer::connectToBuffer()
+{
+
+}
+
+//=============================================================================================================
+
+void FtBuffProducer::parseBufferHeader()
+{
+
+}
+
+//=============================================================================================================
+
+void FtBuffProducer::getBufferData()
+{
+    m_pFtConnector->getData();
+
+    //Sends up new data when FtConnector flags new data
+    if (m_pFtConnector->newData()) {
+        emit newDataAvailable(m_pFtConnector->getMatrix());
+        m_pFtConnector->resetEmitData();
+    }
 }
 
 //=============================================================================================================

@@ -267,7 +267,7 @@ bool FtBuffer::setupRTMSAFromFile(QFile &file)
 
 //=============================================================================================================
 
-bool FtBuffer::setupRTMSA(FIFFLIB::FiffInfo FiffInfo)
+bool FtBuffer::setupRTMSA(const FIFFLIB::FiffInfo& FiffInfo)
 {
     //Check for FiffInfo that has not changed its default values and return early
     if (FiffInfo.sfreq < 0) {

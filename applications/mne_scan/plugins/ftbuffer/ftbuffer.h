@@ -227,7 +227,7 @@ private:
      *
      * @param[in] FiffInfo  FiffInfo used to set up buffer output.
      */
-    bool setupRTMSA(FIFFLIB::FiffInfo FiffInfo);
+    bool setupRTMSA(const FIFFLIB::FiffInfo& FiffInfo);
 
     //=========================================================================================================
     /**
@@ -235,13 +235,23 @@ private:
      */
     void processIncomingData(Eigen::MatrixXd& dataHandler);
 
+    //=========================================================================================================
+    /**
+     * @brief setupRTMSAFromFile
+     *
+     * @param file
+     *
+     * @return
+     */
     bool setupRTMSAFromFile(QFile& file);
 
-    bool                                                                                m_bOutputConfigured;                /**< Whether the buffer output has been configured. */
+    bool                                                                                m_bOutputConfigured;            /**< Whether the buffer output has been configured. */
+
+    QString                                                                             m_sBufferAddress;               /**< The address used to connect to the buffer if starting without being connected */
+    int                                                                                 m_iBufferPort;                  /**< The port used to connect to the buffer if starting without being connected */
 
     QMutex                                                                              m_mutex;                        /**< Guards shared data from being accessed at the same time. */
-
-    QThread                                                                             m_pProducerThread;              /**< Producer thread for the FtBuffProducer object. */
+    QThread                                                                             m_producerThread;              /**< Producer thread for the FtBuffProducer object. */
 
     QSharedPointer<FtBuffProducer>                                                      m_pFtBuffProducer;              /**< Pointer to producer object that handles data from FtConnector*/
     QSharedPointer<FIFFLIB::FiffInfo>                                                   m_pFiffInfo;                    /**< Fiff measurement info.*/
@@ -249,8 +259,6 @@ private:
     QSharedPointer<SCSHAREDLIB::PluginOutputData<SCMEASLIB::RealTimeMultiSampleArray> > m_pRTMSA_BufferOutput;          /**< The RealTimeSampleArray to provide the plugin output data.*/
     QSharedPointer<UTILSLIB::CircularBuffer_Matrix_double>                              m_pCircularBuffer;              /**< Holds incoming raw data. */
 
-    QString                                                                             m_sBufferAddress;               /**< The address used to connect to the buffer if starting without being connected */
-    int                                                                                 m_iBufferPort;                  /**< The port used to connect to the buffer if starting without being connected */
 };
 }//namespace end brace
 
