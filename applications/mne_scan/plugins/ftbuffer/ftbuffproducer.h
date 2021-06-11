@@ -42,6 +42,8 @@
 
 #include "ftconnector.h"
 
+#include <memory>
+
 //=============================================================================================================
 // QT INCLUDES
 //=============================================================================================================
@@ -127,7 +129,15 @@ protected:
     /**
      * Loops continuously to aquire new data from FtConnector and send to FtBuffer
      */
-    virtual void runMainLoop();
+    virtual void interfaceWithBuffer();
+
+    void connectToBuffer();
+
+    void parseHeader();
+
+    void getBufferData();
+
+    void initConnector();
 
 signals:
     //=========================================================================================================
@@ -148,16 +158,18 @@ signals:
 
     //=========================================================================================================
     /**
+     * @brief statusMessage
+     *
+     * @param message
+     */
+    void statusMessage(QString message);
+
+    //=========================================================================================================
+    /**
      * @brief newInfoAvailable
      * @param info
      */
     void newInfoAvailable(const FIFFLIB::FiffInfo& info);
-
-    void connectToBuffer();
-
-    void parseBufferHeader();
-
-    void getBufferData();
 
 private:
     QMutex                          m_mutex;
@@ -169,7 +181,7 @@ private:
 
     FtBuffer*                       m_pFtBuffer;                /**< Pointer to FtBuffer that created this object. Destination of collected data. */
 
-    FtConnector*                    m_pFtConnector;             /**< FtConnectr object that interfaces with buffer and gets buffer data. */
+    std::unique_ptr<FtConnector>    m_pFtConnector;             /**< FtConnectr object that interfaces with buffer and gets buffer data. */
 };
 
 } // namespace

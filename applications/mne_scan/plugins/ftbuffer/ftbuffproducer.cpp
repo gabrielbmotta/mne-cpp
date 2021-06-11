@@ -73,38 +73,11 @@ FtBuffProducer::~FtBuffProducer()
 
 //=============================================================================================================
 
-void FtBuffProducer::runMainLoop()
-{
-    qInfo() << "[FtBuffProducer::runMainLoop] Running producer...";
-
-    while(!m_pFtConnector->connect()) {
-        QThread::usleep(50000);
-    }
-
-    while(!m_pFtConnector->getHeader()) {
-        QThread::usleep(50000);
-    }
-
-    m_pFtConnector->catchUpToBuffer();
-
-    qInfo() << "[FtBuffProducer::runMainLoop] Connected to buffer and ready to receive data.";
-
-    while(!this->thread()->isInterruptionRequested()) {
-
-
-        //QThread::usleep(50);
-    }
-
-    this->thread()->quit();
-}
-
-//=============================================================================================================
-
-void FtBuffProducer::runMainLoop()
+void FtBuffProducer::interfaceWithBuffer()
 {
     while(!this->thread()->isInterruptionRequested()) {
         connectToBuffer();
-        parseBufferHeader();
+        parseHeader();
         while(!this->thread()->isInterruptionRequested() && m_bConnectAndHeader){
             getBufferData();
         }
@@ -115,14 +88,24 @@ void FtBuffProducer::runMainLoop()
 
 void FtBuffProducer::connectToBuffer()
 {
+    m_pFtConnector->setAddr(m_sBufferAddress);
+    m_pFtConnector->setPort(m_iBufferPort);
 
+    while(!m_pFtConnector->connect()) {
+        QThread::msleep(100);
+    }
 }
 
 //=============================================================================================================
 
-void FtBuffProducer::parseBufferHeader()
+void FtBuffProducer::parseHeader()
 {
+    while(!m_pFtConnector->getHeader()) {
+        QThread::msleep(100);
+    }
 
+    FIFFLIB::FiffInfo info = m_pFtConnector->parseBufferHeaders();
+    emit newInfoAvailable(info);
 }
 
 //=============================================================================================================
@@ -140,9 +123,18 @@ void FtBuffProducer::getBufferData()
 
 //=============================================================================================================
 
+void FtBuffProducer::initConnector()
+{
+    m_pFtConnector = std::make_unique<FtConnector>();
+}
+
+//=============================================================================================================
+
 void FtBuffProducer::doWork()
 {
-    runMainLoop();
+    initConnector();
+    interfaceWithBuffer();
+    this->thread()->quit();
 }
 
 //=============================================================================================================
@@ -150,32 +142,9 @@ void FtBuffProducer::doWork()
 void FtBuffProducer::connectToBuffer(QString addr,
                                      int port)
 {
-    if (m_pFtConnector != Q_NULLPTR) {
-        delete m_pFtConnector;
-    }
-
-    //new parameters, new connector object
-    m_pFtConnector = new FtConnector();
-    m_pFtConnector->setAddr(addr);
-    m_pFtConnector->setPort(port);
-
-//    //Try to read neuromag fif from file. If no file, try to read from buffer
-//    if(!m_pFtBuffer->setupRTMSA()){
-//        qInfo() << "[FtBuffProducer::connectToBuffer] Attempting to read neuromag header from buffer...";
-//        if(!m_pFtConnector->connect()) {
-//            emit connecStatus(false);
-//            return;
-//        }
-//        if (!m_pFtBuffer->setupRTMSA(m_pFtConnector->parseNeuromagHeader())) {
-//            qInfo() << "[FtBuffProducer::connectToBuffer] Failed to read neuromag header from buffer.";
-//            emit connecStatus(false);
-//            return;
-//        }
-//    }
-
     //Try to get info from buffer first, then resort to file
     if(m_pFtConnector->connect()) {
-        if (m_pFtBuffer->setupRTMSA(m_pFtConnector->parseExtenedHeaders())) {
+        if (m_pFtBuffer->setupRTMSA(m_pFtConnector->parseBufferHeaders())) {
             qInfo() << "[FtBuffProducer::connectToBuffer] Failed to read neuromag header from buffer.";
             emit connecStatus(true);
             return;

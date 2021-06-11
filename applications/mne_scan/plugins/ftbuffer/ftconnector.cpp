@@ -538,14 +538,12 @@ QString FtConnector::getAddr()
 
 //=============================================================================================================
 
-FIFFLIB::FiffInfo FtConnector::parseExtenedHeaders()
+FIFFLIB::FiffInfo FtConnector::parseBufferHeaders()
 {
     qInfo() << "[FtConnector::parseNeuromagHeader] Attempting to get extended header...";
 
     QBuffer chunkBuffer;
     QBuffer neuromagBuffer;
-
-    getHeader();
 
     prepBuffer(chunkBuffer, m_iExtendedHeaderSize);
 
