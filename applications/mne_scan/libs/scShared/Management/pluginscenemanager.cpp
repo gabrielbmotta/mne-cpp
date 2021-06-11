@@ -115,6 +115,7 @@ bool PluginSceneManager::removePlugin(const AbstractPlugin::SPtr pPlugin)
     }
     if(pos != -1)
     {
+        pPlugin->stop();
         m_pluginList.removeAt(pos);
         return true;
     }

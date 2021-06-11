@@ -229,7 +229,15 @@ private:
      */
     bool setupRTMSA(FIFFLIB::FiffInfo FiffInfo);
 
-    bool                                                                                m_bIsConfigured;                /**< Whether the buffer output has been configured. */
+    //=========================================================================================================
+    /**
+     * @brief processIncomingData
+     */
+    void processIncomingData(Eigen::MatrixXd& dataHandler);
+
+    bool setupRTMSAFromFile(QFile& file);
+
+    bool                                                                                m_bOutputConfigured;                /**< Whether the buffer output has been configured. */
 
     QMutex                                                                              m_mutex;                        /**< Guards shared data from being accessed at the same time. */
 

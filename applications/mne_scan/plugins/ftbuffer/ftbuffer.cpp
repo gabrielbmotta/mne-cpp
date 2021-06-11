@@ -64,7 +64,7 @@ using namespace UTILSLIB;
 //=============================================================================================================
 
 FtBuffer::FtBuffer()
-: m_bIsConfigured(false)
+: m_bOutputConfigured(false)
 , m_pFtBuffProducer(QSharedPointer<FtBuffProducer>::create(this))
 , m_pFiffInfo(QSharedPointer<FiffInfo>::create())
 , m_pCircularBuffer(QSharedPointer<CircularBuffer_Matrix_double>(new CircularBuffer_Matrix_double(10)))
@@ -95,27 +95,7 @@ void FtBuffer::init()
     m_pRTMSA_BufferOutput = PluginOutputData<RealTimeMultiSampleArray>::create(this, "FtBuffer", "FtBuffer Output");
     m_pRTMSA_BufferOutput->measurementData()->setName(this->getName());//Provide name to auto store widget settings
     m_outputConnectors.append(m_pRTMSA_BufferOutput);
-}
 
-//=============================================================================================================
-
-void FtBuffer::unload()
-{
-}
-
-//=============================================================================================================
-
-bool FtBuffer::start()
-{
-    if (!m_bIsConfigured) {
-        m_pFtBuffProducer->connectToBuffer(m_sBufferAddress,
-                                           m_iBufferPort);
-        if (!m_bIsConfigured) {
-            return false;
-        }
-    }
-
-    qInfo() << "[FtBuffer::start] Starting FtBuffer...";
 
     //Move relevant objects to new thread
     m_pFtBuffProducer->m_pFtConnector->m_pSocket->moveToThread(&m_pProducerThread);
@@ -134,6 +114,29 @@ bool FtBuffer::start()
     emit workCommand();
 
     QThread::start();
+}
+
+//=============================================================================================================
+
+void FtBuffer::unload()
+{
+}
+
+//=============================================================================================================
+
+bool FtBuffer::start()
+{
+//    if (!m_bIsConfigured) {
+//        m_pFtBuffProducer->connectToBuffer(m_sBufferAddress,
+//                                           m_iBufferPort);
+//        if (!m_bIsConfigured) {
+//            return false;
+//        }
+//    }
+
+    qInfo() << "[FtBuffer::start] Starting FtBuffer...";
+
+
 
     return true;
 }
@@ -144,7 +147,7 @@ bool FtBuffer::stop()
 {
     qInfo() << "[FtBuffer::stop] Stopping.";
 
-    m_bIsConfigured = false;
+    m_bOutputConfigured = false;
 
     //stops separate producer/client thread first
     m_pProducerThread.requestInterruption();
@@ -196,16 +199,24 @@ void FtBuffer::run()
     MatrixXd matData;
 
     while(!isInterruptionRequested()) {
-        //qDebug() << "[FtBuffer::run] m_pFiffInfo->dig.size()" << m_pFiffInfo->dig.size();
-        //pop matrix
-        if(m_pCircularBuffer->pop(matData)) {
-            //emit values
-            if(!isInterruptionRequested()) {
-                m_pRTMSA_BufferOutput->measurementData()->setValue(matData);
-            }
+        if (m_bOutputConfigured){
+            processIncomingData(matData);
         }
     }
 }
+
+//=============================================================================================================
+
+void FtBuffer::processIncomingData(MatrixXd& dataHandler)
+{
+    if(m_pCircularBuffer->pop(dataHandler)) {
+        //emit values
+        if(!isInterruptionRequested()) {
+            m_pRTMSA_BufferOutput->measurementData()->setValue(dataHandler);
+        }
+    }
+}
+
 
 //=============================================================================================================
 
@@ -222,29 +233,36 @@ bool FtBuffer::setupRTMSA()
 {
     qInfo() << "[FtBuffer::setupRTMSA] Attempting to set up parameters from .fif file...";
 
-    QBuffer qbuffInputSampleFif;
-    qbuffInputSampleFif.open(QIODevice::ReadWrite);
-
     QFile infile("neuromag2ft.fif");
 
     if(!infile.open(QIODevice::ReadOnly)) {
         qInfo() << "[FtBuffer::setupRTMSA] Could not open file.  Plugin output won't be based on local fif parameters.";
     } else {
-        qbuffInputSampleFif.write(infile.readAll());
-
-        m_pNeuromagHeadChunkData = QSharedPointer<FIFFLIB::FiffRawData>(new FiffRawData(qbuffInputSampleFif));
-        m_pFiffInfo = QSharedPointer<FIFFLIB::FiffInfo>(new FiffInfo (m_pNeuromagHeadChunkData->info));
-
-        //Set the RMTSA parameters
-        m_pRTMSA_BufferOutput->measurementData()->initFromFiffInfo(m_pFiffInfo);
-        m_pRTMSA_BufferOutput->measurementData()->setMultiArraySize(1);
-        m_pRTMSA_BufferOutput->measurementData()->setVisibility(true);
-
-        qInfo() << "[FtBuffer::setupRTMSA] Successfully acquired fif info from file.";
-        return m_bIsConfigured = true;
+        setupRTMSAFromFile(infile);
     }
 
     return false;
+}
+
+//=============================================================================================================
+
+bool FtBuffer::setupRTMSAFromFile(QFile &file)
+{
+    QBuffer qbuffInputSampleFif;
+    qbuffInputSampleFif.open(QIODevice::ReadWrite);
+
+    qbuffInputSampleFif.write(file.readAll());
+
+    m_pNeuromagHeadChunkData = QSharedPointer<FIFFLIB::FiffRawData>(new FiffRawData(qbuffInputSampleFif));
+    m_pFiffInfo = QSharedPointer<FIFFLIB::FiffInfo>(new FiffInfo (m_pNeuromagHeadChunkData->info));
+
+    //Set the RMTSA parameters
+    m_pRTMSA_BufferOutput->measurementData()->initFromFiffInfo(m_pFiffInfo);
+    m_pRTMSA_BufferOutput->measurementData()->setMultiArraySize(1);
+    m_pRTMSA_BufferOutput->measurementData()->setVisibility(true);
+
+    qInfo() << "[FtBuffer::setupRTMSA] Successfully acquired fif info from file.";
+    return m_bOutputConfigured = true;
 }
 
 //=============================================================================================================
@@ -268,7 +286,7 @@ bool FtBuffer::setupRTMSA(FIFFLIB::FiffInfo FiffInfo)
     m_pRTMSA_BufferOutput->measurementData()->setVisibility(true);
 
     qInfo() << "[FtBuffer::setupRTMSA] Successfully acquired fif info from buffer.";
-    return m_bIsConfigured = true;
+    return m_bOutputConfigured = true;
 }
 
 //=============================================================================================================
