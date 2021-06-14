@@ -91,29 +91,28 @@ QSharedPointer<AbstractPlugin> FtBuffer::clone() const
 
 void FtBuffer::init()
 {
-    qInfo() << "[FtBuffer::init] Initializing FtBuffer plugin...";
-    m_pRTMSA_BufferOutput = PluginOutputData<RealTimeMultiSampleArray>::create(this, "FtBuffer", "FtBuffer Output");
-    m_pRTMSA_BufferOutput->measurementData()->setName(this->getName());//Provide name to auto store widget settings
-    m_outputConnectors.append(m_pRTMSA_BufferOutput);
-
+//    qInfo() << "[FtBuffer::init] Initializing FtBuffer plugin...";
+//    m_pRTMSA_BufferOutput = PluginOutputData<RealTimeMultiSampleArray>::create(this, "FtBuffer", "FtBuffer Output");
+//    m_pRTMSA_BufferOutput->measurementData()->setName(this->getName());//Provide name to auto store widget settings
+//    m_outputConnectors.append(m_pRTMSA_BufferOutput);
 
     //Move relevant objects to new thread
-    m_pFtBuffProducer->m_pFtConnector->m_pSocket->moveToThread(&m_producerThread);
-    m_pFtBuffProducer->m_pFtConnector->moveToThread(&m_producerThread);
-    m_pFtBuffProducer->moveToThread(&m_producerThread);
+//    m_pFtBuffProducer->m_pFtConnector->m_pSocket->moveToThread(&m_producerThread);
+//    m_pFtBuffProducer->m_pFtConnector->moveToThread(&m_producerThread);
+//    m_pFtBuffProducer->moveToThread(&m_producerThread);
 
-    //Connect signals to communicate with new thread
-    connect(m_pFtBuffProducer.data(), &FtBuffProducer::newDataAvailable,
-            this, &FtBuffer::onNewDataAvailable, Qt::DirectConnection);
-    connect(this, &FtBuffer::workCommand,
-            m_pFtBuffProducer.data(), &FtBuffProducer::startProducer);
+//    //Connect signals to communicate with new thread
+//    connect(m_pFtBuffProducer.data(), &FtBuffProducer::newDataAvailable,
+//            this, &FtBuffer::onNewDataAvailable, Qt::DirectConnection);
+//    connect(this, &FtBuffer::workCommand,
+//            m_pFtBuffProducer.data(), &FtBuffProducer::startProducer);
+//    connect(this, &FtBuffer::toggleDataCollection,
+//            m_pFtBuffProducer.data(), &FtBuffProducer::toggleDataCollection);
 
-    m_producerThread.start();
+//    m_producerThread.start();
 
-    qInfo() << "[FtBuffer::start] Producer thread created, sending work command...";
-    emit workCommand();
-
-    QThread::start();
+//    qInfo() << "[FtBuffer::start] Producer thread created, sending work command...";
+    //emit workCommand();
 }
 
 //=============================================================================================================
@@ -126,6 +125,8 @@ void FtBuffer::unload()
 
 bool FtBuffer::start()
 {
+    QThread::start();
+
     return true;
 }
 

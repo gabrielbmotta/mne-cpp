@@ -43,13 +43,13 @@
 #include "ftconnector.h"
 
 #include <memory>
+#include <mutex>
 
 //=============================================================================================================
 // QT INCLUDES
 //=============================================================================================================
 
 #include <QThread>
-#include <QMutex>
 
 //=============================================================================================================
 // EIGEN INCLUDES
@@ -107,6 +107,14 @@ public slots:
      * Runs the producer calss run() function
      */
     void startProducer();
+
+    //=========================================================================================================
+    /**
+     * @brief toggleDataCollection
+     *
+     * @param toggle
+     */
+    void toggleDataCollection(bool toggle);
 
 protected:
     //=========================================================================================================
@@ -178,9 +186,10 @@ signals:
     void newInfoAvailable(const FIFFLIB::FiffInfo& info);
 
 private:
-    QMutex                          m_mutex;
+    std::mutex                      m_mutex;
 
     bool                            m_bConnectAndHeader;
+    bool                            m_bCollectData;
 
     QString                         m_sBufferAddress;           /**< The address used to connect to the buffer if starting without being connected */
     int                             m_iBufferPort;              /**< The port used to connect to the buffer if starting without being connected */

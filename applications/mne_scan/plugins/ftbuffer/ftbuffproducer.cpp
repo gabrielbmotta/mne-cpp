@@ -60,6 +60,8 @@ using namespace FTBUFFERPLUGIN;
 
 FtBuffProducer::FtBuffProducer(FtBuffer* pFtBuffer)
 : m_pFtBuffer(pFtBuffer)
+, m_bConnectAndHeader(false)
+, m_bCollectData(false)
 {
 }
 
@@ -78,6 +80,7 @@ void FtBuffProducer::interfaceWithBuffer()
         parseHeader();
         while(!this->thread()->isInterruptionRequested() && m_bConnectAndHeader){
             getBufferData();
+            QThread::msleep(5);
         }
     }
     disconnectFromBuffer();
@@ -116,12 +119,16 @@ void FtBuffProducer::parseHeader()
 
 void FtBuffProducer::getBufferData()
 {
-    m_pFtConnector->getData();
+    std::lock_guard<std::mutex> locker(m_mutex);
 
-    //Sends up new data when FtConnector flags new data
-    if (m_pFtConnector->newData()) {
-        emit newDataAvailable(m_pFtConnector->getMatrix());
-        m_pFtConnector->resetEmitData();
+    if(m_bCollectData){
+        m_pFtConnector->getData();
+
+        //Sends up new data when FtConnector flags new data
+        if (m_pFtConnector->newData()) {
+            emit newDataAvailable(m_pFtConnector->getMatrix());
+            m_pFtConnector->resetEmitData();
+        }
     }
 }
 
@@ -147,4 +154,12 @@ void FtBuffProducer::disconnectFromBuffer()
 {
     m_pFtConnector->disconnectFromBuffer();
     emit connecStatus(false);
+}
+
+//=============================================================================================================
+
+void FtBuffProducer::toggleDataCollection(bool toggle)
+{
+    std::lock_guard<std::mutex> locker(m_mutex);
+    m_bCollectData = toggle;
 }
