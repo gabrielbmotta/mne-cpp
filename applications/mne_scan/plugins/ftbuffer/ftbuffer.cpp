@@ -98,17 +98,17 @@ void FtBuffer::init()
 
 
     //Move relevant objects to new thread
-    m_pFtBuffProducer->m_pFtConnector->m_pSocket->moveToThread(&m_pProducerThread);
-    m_pFtBuffProducer->m_pFtConnector->moveToThread(&m_pProducerThread);
-    m_pFtBuffProducer->moveToThread(&m_pProducerThread);
+    m_pFtBuffProducer->m_pFtConnector->m_pSocket->moveToThread(&m_producerThread);
+    m_pFtBuffProducer->m_pFtConnector->moveToThread(&m_producerThread);
+    m_pFtBuffProducer->moveToThread(&m_producerThread);
 
     //Connect signals to communicate with new thread
     connect(m_pFtBuffProducer.data(), &FtBuffProducer::newDataAvailable,
             this, &FtBuffer::onNewDataAvailable, Qt::DirectConnection);
     connect(this, &FtBuffer::workCommand,
-            m_pFtBuffProducer.data(), &FtBuffProducer::doWork);
+            m_pFtBuffProducer.data(), &FtBuffProducer::startProducer);
 
-    m_pProducerThread.start();
+    m_producerThread.start();
 
     qInfo() << "[FtBuffer::start] Producer thread created, sending work command...";
     emit workCommand();
@@ -126,18 +126,6 @@ void FtBuffer::unload()
 
 bool FtBuffer::start()
 {
-//    if (!m_bIsConfigured) {
-//        m_pFtBuffProducer->connectToBuffer(m_sBufferAddress,
-//                                           m_iBufferPort);
-//        if (!m_bIsConfigured) {
-//            return false;
-//        }
-//    }
-
-    qInfo() << "[FtBuffer::start] Starting FtBuffer...";
-
-
-
     return true;
 }
 
@@ -145,22 +133,18 @@ bool FtBuffer::start()
 
 bool FtBuffer::stop()
 {
-    qInfo() << "[FtBuffer::stop] Stopping.";
+    qInfo() << "[FtBuffer::stop] Stopping...";
 
     m_bOutputConfigured = false;
 
     //stops separate producer/client thread first
-    m_pProducerThread.requestInterruption();
-    while(m_pProducerThread.isRunning()) {
+    m_producerThread.requestInterruption();
+    while(m_producerThread.isRunning()) {
         msleep(10);
     }
 
     requestInterruption();
     wait();
-
-    //Reset ftproducer and sample received list
-    m_pFtBuffProducer.clear();
-    m_pFtBuffProducer = QSharedPointer<FtBuffProducer>::create(this);
 
     // Clear all data in the buffer connected to displays and other plugins
     m_pRTMSA_BufferOutput->measurementData()->clear();

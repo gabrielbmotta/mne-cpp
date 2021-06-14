@@ -101,28 +101,12 @@ public:
      */
     ~FtBuffProducer();
 
-    //=========================================================================================================
-    /**
-     * Disconnects the member FtConnector from the buffer it is connected to
-     */
-    bool disconnectFromBuffer();
-
 public slots:
     //=========================================================================================================
     /**
      * Runs the producer calss run() function
      */
-    void doWork();
-
-    //=========================================================================================================
-    /**
-     * Connects to the buffer at a given address. Tries to setup buffer output
-     *
-     * @param[in] addr  IP address where the buffer is hosted.
-     * @param[in] port  Port where the buffer is hosted.
-     */
-    void connectToBuffer(QString addr,
-                         int port);
+    void startProducer();
 
 protected:
     //=========================================================================================================
@@ -131,13 +115,35 @@ protected:
      */
     virtual void interfaceWithBuffer();
 
+    //=========================================================================================================
+    /**
+     * @brief connectToBuffer
+     */
     void connectToBuffer();
 
+    //=========================================================================================================
+    /**
+     * @brief parseHeader
+     */
     void parseHeader();
 
+    //=========================================================================================================
+    /**
+     * @brief getBufferData
+     */
     void getBufferData();
 
+    //=========================================================================================================
+    /**
+     * @brief initConnector
+     */
     void initConnector();
+
+    //=========================================================================================================
+    /**
+     * Disconnects the member FtConnector from the buffer it is connected to
+     */
+    void disconnectFromBuffer();
 
 signals:
     //=========================================================================================================

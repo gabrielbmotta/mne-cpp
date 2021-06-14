@@ -184,7 +184,7 @@ public:
      *
      * @return true if successful, false if unsuccessful.
      */
-    bool disconnect();
+    void disconnectFromBuffer();
 
     //=========================================================================================================
     /**
@@ -272,7 +272,7 @@ public:
      *
      * @return returns the FiffInfo from the parsed fif file from the neuromag header chunk.
      */
-    FIFFLIB::FiffInfo parseExtenedHeaders();
+    FIFFLIB::FiffInfo parseBufferHeaders();
 
     //=========================================================================================================
     /**

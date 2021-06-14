@@ -507,12 +507,10 @@ void FtConnector::resetEmitData()
 
 //=============================================================================================================
 
-bool FtConnector::disconnect()
+void FtConnector::disconnectFromBuffer()
 {
     m_pSocket->disconnectFromHost();
-    m_pSocket->waitForDisconnected(200);
-
-    return true;
+    m_pSocket->waitForDisconnected();
 }
 
 //=============================================================================================================
