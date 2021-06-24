@@ -60,6 +60,10 @@ struct SpectogramInputData {
     qint32 window_size;
 };
 
+struct SpectrogramParams {
+
+};
+
 class UTILSSHARED_EXPORT Spectrogram
 {
 
@@ -75,6 +79,18 @@ public:
      */
     static Eigen::MatrixXd makeSpectrogram(Eigen::VectorXd signal,
                                            qint32 windowSize);
+
+    //=========================================================================================================
+    /**
+     * @brief makeSpectrogram
+     *
+     * @param signal
+     * @param params
+     *
+     * @return
+     */
+    static Eigen::MatrixXd makeSpectrogram(Eigen::MatrixXd signal,
+                                           SpectrogramParams params);
 
 private:
     //=========================================================================================================

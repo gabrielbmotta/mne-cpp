@@ -64,16 +64,21 @@ using namespace Eigen;
 // DEFINE MEMBER METHODS
 //=============================================================================================================
 
+//MatrixXd Spectrogram::makeSpectrogram(VectorXd signal, qint32 windowSize = 0)
+//{
+
+//}
+
 MatrixXd Spectrogram::makeSpectrogram(VectorXd signal, qint32 windowSize = 0)
 {
-    //QElapsedTimer timer;
-    //timer.start();
+//    QElapsedTimer timer;
+//    timer.start();
 
     signal.array() -= signal.mean();
-    QList<SpectogramInputData> lData;
-    int iThreadSize = QThread::idealThreadCount()*2;
-    int iStepsSize = signal.rows()/iThreadSize;
-    int iResidual = signal.rows()%iThreadSize;
+//    QList<SpectogramInputData> lData;
+//    int iThreadSize = QThread::idealThreadCount();
+//    int iStepsSize = signal.rows()/iThreadSize;
+//    int iResidual = signal.rows()%iThreadSize;
 
     SpectogramInputData dataTemp;
     dataTemp.vecInputData = signal;
@@ -82,23 +87,31 @@ MatrixXd Spectrogram::makeSpectrogram(VectorXd signal, qint32 windowSize = 0)
         dataTemp.window_size = signal.rows()/15;
     }
 
-    for (int i = 0; i < iThreadSize; ++i) {
-        dataTemp.iRangeLow = i*iStepsSize;
-        dataTemp.iRangeHigh = i*iStepsSize+iStepsSize;
-        lData.append(dataTemp);
-    }
+//    for (int i = 0; i < iThreadSize; ++i) {
+//        dataTemp.iRangeLow = i*iStepsSize;
+//        dataTemp.iRangeHigh = i*iStepsSize+iStepsSize;
+//        lData.append(dataTemp);
+//    }
 
-    dataTemp.iRangeLow = iThreadSize*iStepsSize;
-    dataTemp.iRangeHigh = iThreadSize*iStepsSize+iResidual;
-    lData.append(dataTemp);
+    dataTemp.iRangeLow = 0;
+    dataTemp.iRangeHigh = signal.rows();
+//    lData.append(dataTemp);
 
-    QFuture<MatrixXd> resultMat = QtConcurrent::mappedReduced(lData,
-                                                              compute,
-                                                              reduce);
-    resultMat.waitForFinished();
+    return compute(dataTemp);
 
-    //qDebug() << "Spectrogram::make_spectrogram - timer.elapsed()" << timer.elapsed();
-    return resultMat.result();
+//    QFuture<MatrixXd> resultMat = QtConcurrent::mappedReduced(lData,
+//                                                              compute,
+//                                                              reduce);
+//    resultMat.waitForFinished();
+
+//    qDebug() << "Spectrogram::make_spectrogram - timer.elapsed()" << timer.elapsed();
+//    return resultMat.result();
+}
+
+MatrixXd Spectrogram::makeSpectrogram(Eigen::MatrixXd signal,
+                                      SpectrogramParams params)
+{
+
 }
 
 //=============================================================================================================

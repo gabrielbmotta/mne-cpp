@@ -51,6 +51,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QFile>
+#include <QElapsedTimer>
 
 //=============================================================================================================
 // USED NAMESPACES
@@ -97,11 +98,20 @@ int main(int argc, char *argv[])
     FiffEvoked p_FiffEvoked(t_sampleFile,QVariant(parser.value(evokedIdxOption)));
 
     //tf plot
+
+    QElapsedTimer timer;
+    timer.start();
+
     VectorXd dataCol = p_FiffEvoked.data.row(83).transpose();
+
+    qDebug() << "data length" << dataCol.rows();
+
     MatrixXd dataSpectrum = Spectrogram::makeSpectrogram(dataCol, p_FiffEvoked.info.sfreq*0.1);
 
-    TFplot tfplot(dataSpectrum, p_FiffEvoked.info.sfreq, 1, 50, ColorMaps::Jet);
-    tfplot.show();
+    qDebug() << "\n\n\nSpectrogram::make_spectrogram - timer.elapsed()" << timer.elapsed() << "\n\n\n";
+
+    //TFplot tfplot(dataSpectrum, p_FiffEvoked.info.sfreq, 1, 50, ColorMaps::Jet);
+    //tfplot.show();
 
     return a.exec();
 }
