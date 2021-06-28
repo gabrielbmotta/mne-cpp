@@ -262,6 +262,8 @@ private:
 
     void initFiffDigitizers(QSharedPointer<FIFFLIB::FiffDigitizerData> fiffDig);
 
+    void updateDigitizerInfo();
+
     QMutex                      m_mutex;                    /**< The threads mutex.*/
 
     QVector<int>                m_vCoilFreqs;               /**< Vector contains the HPI coil frequencies. */
@@ -297,6 +299,8 @@ signals:
     void movementResultsChanged(double dMovement,
                                 double dRotation);
     void devHeadTransAvailable(const FIFFLIB::FiffCoordTrans& devHeadTrans);
+
+    void newDigitizerList(QList<FIFFLIB::FiffDigPoint> pointList);
 };
 } // NAMESPACE
 
