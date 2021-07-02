@@ -42,12 +42,14 @@
 #include "../ftbuffer.h"
 #include "../ftbuffproducer.h"
 #include "../ftconnector.h"
+#include <memory>
 
 //=============================================================================================================
 // QT INCLUDES
 //=============================================================================================================
 
 #include <QtWidgets>
+#include <QCompleter>
 
 //=============================================================================================================
 // FORWARD DECLARATIONS
@@ -83,6 +85,16 @@ class FtBufferSetupWidget : public QWidget
     Q_OBJECT
 
 public:
+    struct Parameters{
+        QString         m_addr;
+        int             m_port;
+        QList<QString>  m_hist;
+
+        Parameters(QString addr,
+                   int port,
+                   QList<QString>hist):m_addr(addr), m_port(port), m_hist(hist){};
+    };
+
     //=========================================================================================================
     /**
      * Constructs a FtBufferSetupWidget which is a child of parent.
@@ -126,6 +138,8 @@ public:
      */
     void isConnected(bool stat);
 
+    void setParameters(Parameters param);
+
 signals:
     /**
      * Sends a singal with the cooresponding port and address information
@@ -141,7 +155,7 @@ private:
 
     QString     m_sSettingsPath;            /**< The settings path to store the GUI settings to. */
 
-    Ui::FtBufferSetupUi* m_pUi;	/**< Holds the user interface for the FtBufferSetupWidget.*/
+    Ui::FtBufferSetupUi* m_pUi;	/**< Holds the user interface for the FtBufferSetupWidget.*/    
 };
 
 } // NAMESPACE

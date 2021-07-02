@@ -244,7 +244,6 @@ void Hpi::initFiffInfo(QSharedPointer<FIFFLIB::FiffInfo> info)
 void Hpi::initFiffDigitizers(QSharedPointer<FIFFLIB::FiffDigitizerData> fiffDig)
 {
     if(fiffDig){
-        std::cout << "Shouldn't be here";
         m_pFiffDigitizerData = fiffDig;
         m_pHpiOutput->measurementData()->setDigitizerData(m_pFiffDigitizerData);
         m_mutex.lock();

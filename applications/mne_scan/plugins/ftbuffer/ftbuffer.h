@@ -237,6 +237,15 @@ private:
      */
     bool setupRTMSA(const MetaData& metadata);
 
+    //=========================================================================================================
+    void saveSettings();
+
+    //=========================================================================================================
+    void loadSettings();
+
+    //=========================================================================================================
+    void updateAddressHistory();
+
     bool                                                                                m_bIsConfigured;                /**< Whether the buffer output has been configured. */
 
     QMutex                                                                              m_mutex;                        /**< Guards shared data from being accessed at the same time. */
@@ -251,6 +260,8 @@ private:
 
     QString                                                                             m_sBufferAddress;               /**< The address used to connect to the buffer if starting without being connected */
     int                                                                                 m_iBufferPort;                  /**< The port used to connect to the buffer if starting without being connected */
+
+    QList<QString>                                                                      m_lAddressHistory;
 };
 }//namespace end brace
 

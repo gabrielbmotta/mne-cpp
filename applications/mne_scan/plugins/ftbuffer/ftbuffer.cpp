@@ -115,6 +115,8 @@ bool FtBuffer::start()
         }
     }
 
+    updateAddressHistory();
+
     qInfo() << "[FtBuffer::start] Starting FtBuffer...";
 
     //Move relevant objects to new thread
@@ -186,6 +188,7 @@ QString FtBuffer::getName() const
 QWidget* FtBuffer::setupWidget()
 {
     FtBufferSetupWidget* setupWidget = new FtBufferSetupWidget(this, QString("MNESCAN/%1").arg(this->getName()));
+    setupWidget->setParameters(FtBufferSetupWidget::Parameters(m_sBufferAddress, m_iBufferPort, m_lAddressHistory));
     return setupWidget;
 }
 
@@ -304,4 +307,52 @@ void FtBuffer::setBufferAddress(const QString &sAddress)
 void FtBuffer::setBufferPort(int iPort)
 {
     m_iBufferPort = iPort;
+}
+
+//=============================================================================================================
+
+void FtBuffer::saveSettings()
+{
+    QString path = QString("MNESCAN/%1/").arg(this->getName() + QString("PluginData"));
+
+    QSettings settings("MNECPP");
+
+    settings.setValue(path + QString("bufferAddress"), QVariant::fromValue(m_sBufferAddress));
+    settings.setValue(path + QString("bufferPort"), QVariant::fromValue(m_iBufferPort));
+    settings.setValue(path + QString("addressHistory"), QVariant::fromValue(m_lAddressHistory));
+}
+
+//=============================================================================================================
+
+void FtBuffer::loadSettings()
+{
+    QString path = QString("MNESCAN/%1/").arg(this->getName() + QString("PluginData"));
+
+    QSettings settings("MNECPP");
+
+    m_sBufferAddress = settings.value(path + QString("bufferAddress"), QVariant::fromValue(QString("127.0.0.1"))).toString();
+    m_iBufferPort = settings.value(path + QString("bufferPort"), QVariant::fromValue(1972)).toInt();
+
+    QVariant addrHist = settings.value(path + QString("addressHistory"));
+
+    if(addrHist.isValid()){
+        m_lAddressHistory = addrHist.value<QList<QString> >();
+    }
+}
+
+//=============================================================================================================
+
+void FtBuffer::updateAddressHistory()
+{
+    int maxSize = 5;
+
+    if(!m_lAddressHistory.contains(m_sBufferAddress)){
+        m_lAddressHistory.prepend(m_sBufferAddress);
+        if (m_lAddressHistory.size() > maxSize){
+            m_lAddressHistory.pop_back();
+        }
+    } else {
+        auto index = m_lAddressHistory.indexOf(m_sBufferAddress);
+        m_lAddressHistory.move(index, 0);
+    }
 }

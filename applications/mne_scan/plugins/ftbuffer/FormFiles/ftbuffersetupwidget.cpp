@@ -82,8 +82,8 @@ FtBufferSetupWidget::FtBufferSetupWidget(FtBuffer* toolbox,
             toolbox, &FtBuffer::setBufferAddress);
     connect(m_pUi->m_spinBoxPort, QOverload<int>::of(&QSpinBox::valueChanged),
             toolbox, &FtBuffer::setBufferPort);
-    toolbox->setBufferAddress(m_pUi->m_lineEditIP->text());
-    toolbox->setBufferPort(m_pUi->m_spinBoxPort->value());
+//    toolbox->setBufferAddress(m_pUi->m_lineEditIP->text());
+//    toolbox->setBufferPort(m_pUi->m_spinBoxPort->value());
 }
 
 //=============================================================================================================
@@ -142,4 +142,17 @@ void FtBufferSetupWidget::isConnected(bool stat)
         msgBox.setText("Unable to find relevant fiff info. Is there header data in the buffer?");
         msgBox.exec();
     }
+}
+
+//=============================================================================================================
+
+void FtBufferSetupWidget::setParameters(FtBufferSetupWidget::Parameters param)
+{
+    m_pUi->m_lineEditIP->setText(param.m_addr);
+    m_pUi->m_spinBoxPort->setValue(param.m_port);
+
+    QCompleter* compToDelete = m_pUi->m_lineEditIP->completer();
+    m_pUi->m_lineEditIP->setCompleter(new QCompleter(param.m_hist));
+    m_pUi->m_lineEditIP->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    delete compToDelete;
 }
