@@ -290,7 +290,7 @@ void HpiSettingsView::onLoadDigitizers()
         if (checkFile.exists() && checkFile.isFile()) {
             // Stop cont HPI first
             m_pUi->m_checkBox_continousHPI->setChecked(false);
-            emit digitizersChanged(readPolhemusDig(fileName_HPI), fileName_HPI);
+            emit digitizersChanged(readDigitizersFromFile(fileName_HPI), fileName_HPI);
         } else {
             QMessageBox msgBox;
             msgBox.setText("File could not be loaded!");
@@ -395,7 +395,7 @@ void HpiSettingsView::onRemoveCoil()
 
 //=============================================================================================================
 
-QList<FiffDigPoint> HpiSettingsView::readPolhemusDig(const QString& fileName)
+QList<FiffDigPoint> HpiSettingsView::readDigitizersFromFile(const QString& fileName)
 {
     resetTables();
 

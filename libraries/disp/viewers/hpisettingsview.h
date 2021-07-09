@@ -230,7 +230,7 @@ protected:
     /**
      * Read Polhemus data from fif file.
      */
-    QList<FIFFLIB::FiffDigPoint> readPolhemusDig(const QString& fileName);
+    QList<FIFFLIB::FiffDigPoint> readDigitizersFromFile(const QString& fileName);
 
     void resetTables();
 
