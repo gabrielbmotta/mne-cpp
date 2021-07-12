@@ -219,12 +219,12 @@ void Hpi::manageInitialization(QSharedPointer<SCMEASLIB::RealTimeMultiSampleArra
     if(!m_pFiffInfo) {
         initFiffInfo(pRTMSA->info());
     }
-    if(!m_pFiffDigitizerData && m_pFiffInfo){
-        std::cout << "I'm initializing digitizers\n";
-        initFiffDigitizers(pRTMSA->digitizerData());
-    }
     if(!m_bPluginControlWidgetsInit) {
         initPluginControlWidgets();
+    }
+    if(!m_pFiffDigitizerData && m_pFiffInfo){
+        std::cout << "Initializing digitizers\n";
+        initFiffDigitizers(pRTMSA->digitizerData());
     }
 }
 
@@ -244,15 +244,14 @@ void Hpi::initFiffInfo(QSharedPointer<FIFFLIB::FiffInfo> info)
 void Hpi::initFiffDigitizers(QSharedPointer<FIFFLIB::FiffDigitizerData> fiffDig)
 {
     if(fiffDig){
-        std::cout << "Shouldn't be here";
+        m_mutex.lock();
         m_pFiffDigitizerData = fiffDig;
         m_pHpiOutput->measurementData()->setDigitizerData(m_pFiffDigitizerData);
-        m_mutex.lock();
-
         m_pFiffInfo->dig = m_pFiffDigitizerData->points; //temp solution. refactor fit function so this isn't necessary.
-        updateDigitizerInfo();
-
         m_mutex.unlock();
+
+        std::cout<<"Calling updateDigitizerInfo\n";
+        updateDigitizerInfo();
     }
 }
 
@@ -260,6 +259,7 @@ void Hpi::initFiffDigitizers(QSharedPointer<FIFFLIB::FiffDigitizerData> fiffDig)
 
 void Hpi::updateDigitizerInfo()
 {
+    std::cout << "Emitting signal";
     emit newDigitizerList(m_pFiffDigitizerData->points);
 }
 
@@ -425,7 +425,7 @@ void Hpi::onDoSingleHpiFit()
 {
     if(m_vCoilFreqs.size() < 3) {
        QMessageBox msgBox;
-       msgBox.setText("Please load a digitizer set with at least 3 HPI coils first.");
+       msgBox.setText("Please input HPI coil frequencies first.");
        msgBox.exec();
        return;
     }
@@ -441,7 +441,7 @@ void Hpi::onDoFreqOrder()
 {
     if(m_vCoilFreqs.size() < 3) {
        QMessageBox msgBox;
-       msgBox.setText("Please load a digitizer set with at least 3 HPI coils first.");
+       msgBox.setText("Please input HPI coil frequencies first.");
        msgBox.exec();
        return;
     }
@@ -496,8 +496,6 @@ void Hpi::onDevHeadTransAvailable(const FIFFLIB::FiffCoordTrans& devHeadTrans)
 {
     m_pFiffInfo->dev_head_t = devHeadTrans;
 }
-
-//=============================================================================================================
 
 //=============================================================================================================
 
