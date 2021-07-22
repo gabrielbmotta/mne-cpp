@@ -257,10 +257,10 @@ QStringList IOUtils::get_old_chnames_conventions(const QStringList& chNames)
 {
     QStringList result, xList;
     QString replaceString;
-    QRegExp xRegExp;
+    QRegularExpression xRegExp;
 
     for(int i = 0; i < chNames.size(); ++i) {
-        xRegExp = QRegExp("[0-9]{1,100}");
+        xRegExp = QRegularExpression("[0-9]{1,100}");
         xRegExp.indexIn(chNames.at(i));
         xList = xRegExp.capturedTexts();
 
@@ -302,7 +302,7 @@ bool IOUtils::check_matching_chnames_conventions(const QStringList& chNamesA, co
                 bMatching = true;
             } else {
                 //Create old convention
-                QRegExp xRegExp("[0-9]{1,100}");
+                QRegularExpression xRegExp("[0-9]{1,100}");
                 xRegExp.indexIn(chNamesA.at(i));
                 QStringList xList = xRegExp.capturedTexts();
 

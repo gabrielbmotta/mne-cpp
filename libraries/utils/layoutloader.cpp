@@ -47,6 +47,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QDebug>
+#include <QRegularExpression>
 
 //=============================================================================================================
 // USED NAMESPACES
@@ -89,7 +90,7 @@ bool LayoutLoader::readAsaElcFile(const QString& path,
     {
         QString line = in.readLine();
 
-        QStringList fields = line.split(QRegExp("\\s+"));
+        QStringList fields = line.split(QRegularExpression("\\s+"));
 
         //Delete last element if it is a blank character
         if(fields.at(fields.size()-1) == "")
@@ -133,7 +134,7 @@ bool LayoutLoader::readAsaElcFile(const QString& path,
             if(line.contains("Labels"))
             {
                 line = in.readLine();
-                fields = line.split(QRegExp("\\s+"));
+                fields = line.split(QRegularExpression("\\s+"));
 
                 //Delete last element if it is a blank character
                 if(fields.at(fields.size()-1) == "")
@@ -176,7 +177,7 @@ bool LayoutLoader::readMNELoutFile(const QString &path, QMap<QString, QPointF> &
     while(!in.atEnd()) {
         QString line = in.readLine();
 
-        QStringList fields = line.split(QRegExp("\\s+"));
+        QStringList fields = line.split(QRegularExpression("\\s+"));
 
         //Delete last element if it is a blank character
         if(fields.at(fields.size()-1) == "")

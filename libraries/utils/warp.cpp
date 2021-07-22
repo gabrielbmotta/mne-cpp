@@ -164,7 +164,7 @@ MatrixXf Warp::readsLm(const QString &electrodeFileName)
     while(!in.atEnd())
     {
         QString line = in.readLine();
-        QStringList fields = line.split(QRegExp("\\s+"));
+        QStringList fields = line.split(QRegularExpression("\\s+"));
 
         //Delete last element if it is a blank character
         if(fields.at(fields.size()-1) == "")

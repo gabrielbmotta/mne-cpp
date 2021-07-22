@@ -173,7 +173,7 @@ ECDSet ECDSet::read_dipoles_dip(const QString& fileName)
         while (!in.atEnd())
         {
             QString line = in.readLine();
-            QStringList list = line.split(QRegExp("\\s+"));
+            QStringList list = line.split(QRegularExpression("\\s+"));
 
             if(list[0].contains("#") || list.size() != 11) {
                 continue;

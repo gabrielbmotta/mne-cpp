@@ -616,13 +616,13 @@ void ChannelInfoModel::mapLayoutToChannels()
         //Get current channel information
         FiffChInfo chInfo = channelList.at(i);
         QString chName = chInfo.ch_name;
-        QRegExp regExpRemove;
+        QRegularExpression regExpRemove;
         bool flagOk = false;
 
         switch(chInfo.kind) {
             case FIFFV_MEG_CH:
                 //Scan for MEG string and other characters
-                regExpRemove = QRegExp("(MEG|-|_|/|\| )");
+                regExpRemove = QRegularExpression("(MEG|-|_|/|\| )");
                 chName.remove(regExpRemove);
 
                 //After cleaning the string try to convert the residual to an int number
@@ -633,7 +633,7 @@ void ChannelInfoModel::mapLayoutToChannels()
 
             case FIFFV_EEG_CH: {
                 //Scan for EEG string and other characters
-                regExpRemove = QRegExp("(EEG|-|_|/|\| )");
+                regExpRemove = QRegularExpression("(EEG|-|_|/|\| )");
                 chName.remove(regExpRemove);
 
                 //After cleaning the string try to convert the residual to an int number

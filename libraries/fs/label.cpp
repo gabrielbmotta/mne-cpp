@@ -209,7 +209,7 @@ bool Label::read(const QString& p_sFileName, Label &p_Label)
     for(qint32 i = 0; i < nv; ++i)
     {
         count = 0;
-        list = t_TextStream.readLine().split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        list = t_TextStream.readLine().split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
 
         for(qint32 j = 0; j < list.size(); ++j)
         {
@@ -238,11 +238,11 @@ bool Label::read(const QString& p_sFileName, Label &p_Label)
 
     if(t_File.fileName().contains("lh.label"))
     {
-        QStringList tmpList = t_File.fileName().split("lh.")[0].split(QRegExp("\\W+"));
+        QStringList tmpList = t_File.fileName().split("lh.")[0].split(QRegularExpression("\\W+"));
         p_Label.name = tmpList[tmpList.size()-1];
     }
     else if(t_File.fileName().contains("lh."))
-        p_Label.name = t_File.fileName().split("lh.")[1].split(QRegExp("\\W+"))[0];
+        p_Label.name = t_File.fileName().split("lh.")[1].split(QRegularExpression("\\W+"))[0];
 
     printf("[done]\n");
 
