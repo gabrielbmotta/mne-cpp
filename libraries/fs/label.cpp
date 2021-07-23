@@ -49,6 +49,7 @@
 #include <QTextStream>
 #include <QStringList>
 #include <QSet>
+#include <QRegularExpression>
 //#include <QDebug>
 
 #include <iostream>
@@ -209,7 +210,7 @@ bool Label::read(const QString& p_sFileName, Label &p_Label)
     for(qint32 i = 0; i < nv; ++i)
     {
         count = 0;
-        list = t_TextStream.readLine().split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
+        list = t_TextStream.readLine().split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 
         for(qint32 j = 0; j < list.size(); ++j)
         {

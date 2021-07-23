@@ -55,6 +55,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QString>
+#include <QRegularExpression>
 
 //=============================================================================================================
 // EIGEN INCLUDES

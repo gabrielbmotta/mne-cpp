@@ -101,7 +101,7 @@ bool SelectionIO::readMNESelFile(QString path, QMap<QString,QStringList> &select
                 secondSplit.removeLast();
 
             //Add to map
-            selectionMap.insertMulti(key, secondSplit);
+            selectionMap.insert(key, secondSplit);
         }
     }
 
@@ -143,7 +143,7 @@ bool SelectionIO::readBrainstormMonFile(QString path, QMap<QString,QStringList> 
     }
 
     //Add to map
-    selectionMap.insertMulti(groupName, channels);
+    selectionMap.insert(groupName, channels);
 
     file.close();
 

@@ -52,6 +52,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QList>
+#include <QRegularExpression>
 
 //=============================================================================================================
 // USED NAMESPACES
